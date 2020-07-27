@@ -23,6 +23,9 @@ namespace SimpleCardGame {
             elif (gate == "I") {
                 I(q);
             }
+            /* else {
+                throw new ArgumentException(string.Format("{0} is not a valid gate", gate), "gate");
+            } */
             
             let r = M(q);     // Measure the qubit value.
             Reset(q);
