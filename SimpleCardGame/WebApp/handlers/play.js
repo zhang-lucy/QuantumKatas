@@ -22,38 +22,54 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 'use strict';
-var dataProvider = require('../data/new.js');
-
+var dataProvider = require('../data/play.js');
 /**
- * Operations on /new
+ * Operations on /guess
  */
 module.exports = {
     /**
-     * summary: Initializes a new game board with the specified players
-     * parameters: size
+     * summary: Specifies a card (ID) to reveal
+     * parameters: card
      * produces: application/json, text/json
      * responses: 200, 400
      */
-    post: function game_new(req, res, next) {
-        var status;
-        var message;
-        global.board = null;  // Null out the current game
+    put: function game_guess(req, res, next) {
+        var status, message;
+        var validGuess = true;
+        var board = global.board;
+        var guess = req.query.card;
 
-        // This is a valid game size: initialize new game board
-        status = 200;
-        var provider = dataProvider['post']['200'];
-
-        // Call the data layer to shuffle up a new game
-        var board = provider(req, res, function (err, data) {
-            if (err) {
-                next(err);
-                return;
-            }
-        });
-        message = "Ready to play! Players: " +
-                    req.query.players[0] + 
-                    " and " + 
-                    req.query.players[1]; 
+        // Ensure there's a game running
+        if (!board){
+            validGuess = false;
+            message = "Please start a new game (POST '/new?players={list of players}')."
+        } 
+        // Ensure card isn't out of range
+        else if ((guess < 0)||(guess > board.length)){
+            validGuess = false;
+            message = "Please specify card ids within the range of 0 to " +
+                String(board.length-1) + ".";
+        }
+        // Check that card hasn't been cleared
+        else if ("true" == board[guess].cleared) {
+            validGuess = false;
+            message = "Please specify a card which hasn't been cleared."
+        }
+        
+        // This is a valid guess: reveal the card
+        if (validGuess){
+            status = 200;
+            var provider = dataProvider['put']['200'];
+            var card = provider(req, res, function (err, data) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+            });
+            res.json(card);
+        } else {    // This is not a valid guess: set bad request error
+            status = 400;
+        }
 
         res.status(status).send(message);
     }

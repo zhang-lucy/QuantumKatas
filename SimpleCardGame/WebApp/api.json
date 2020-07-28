@@ -2,17 +2,26 @@
     "swagger": "2.0",
     "info": {
         "version": "v1",
-        "title": "Basic Gates Card Game API",
-        "description": "A simple API for basic gates card game"
+        "title": "Simple Gates Game API",
+        "description": "A simple single-instance representation of memory (Concentration)."
     },
-    "schemes":["http","https"],
-    "consumes":["application/json"],
-    "produces":["application/json"],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
     "paths": {
         "/game": {
             "get": {
-                "tags":["Game"],
-                "summary":"Retrieves the current state of the game board.",
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Retrieves the current state of the memory game board.",
                 "operationId": "game_get",
                 "produces": [
                     "application/json",
@@ -23,8 +32,39 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "items": {
-                                "$ref": "#/definitions/Card"
+                            "properties": {
+                                "players": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Player"
+                                    }
+                                },
+                                "deck": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
+                                "cards": {
+                                    "type": "object",
+                                    "properties": {
+                                        "player_id": {
+                                            "type": "string"
+                                        },
+                                        "cards": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/Card"
+                                            }
+                                        }
+                                    }
+                                },
+                                "qubits": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Qubit"
+                                    }
+                                }
                             }
                         }
                     }
@@ -34,9 +74,11 @@
         },
         "/play": {
             "put": {
-                "tags":["Game"],
-                "summary":"Specifies a card to reveal and checks for a match to the previous.",
-                "operationId": "game_guess",
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Specifies a card to reveal and checks for a match to the previous.",
+                "operationId": "game_play",
                 "produces": [
                     "application/json",
                     "text/json"
@@ -46,19 +88,12 @@
                         "name": "card",
                         "in": "query",
                         "required": true,
-                        "type": "integer",
                         "format": "int32"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/CardPlay"
-                            }
-                        }
+                        "description": "OK"
                     }
                 },
                 "deprecated": false
@@ -66,8 +101,10 @@
         },
         "/new": {
             "post": {
-                "tags":["Game"],
-                "summary":"Initializes a new game board of the specified size (# of matches).",
+                "tags": [
+                    "Game"
+                ],
+                "summary": "Initializes a new game board",
                 "operationId": "game_new",
                 "produces": [
                     "application/json",
@@ -75,11 +112,22 @@
                 ],
                 "parameters": [
                     {
-                        "name": "size",
+                        "name": "players",
                         "in": "query",
                         "required": true,
-                        "type": "integer",
-                        "format": "int32"
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/NewPlayer"
+                        }
+                    },
+                    {
+                        "name": "card_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/CardType"
+                        }
                     }
                 ],
                 "responses": {
@@ -95,21 +143,44 @@
         "Card": {
             "type": "object",
             "properties": {
-                "cleared": {
-                    "type": "boolean"
+                "name": {
+                    "type": "string"
                 }
             }
         },
-        "CardPlay": {
+        "CardType": {
+            "type": "string"
+        },
+        "NewPlayer": {
+            "type": "string"
+        },
+        "Player": {
             "type": "object",
             "properties": {
+                "name": {
+                    "type": "string"
+                },
                 "id": {
+                    "type": "string"
+                },
+                "score": {
                     "format": "int32",
                     "type": "integer"
                 },
+                "cards": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Card"
+                    }
+                }
+            }
+        },
+        "Qubit": {
+            "type": "object",
+            "properties": {
                 "value": {
-                    "format": "int32",
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int32"
                 }
             }
         }

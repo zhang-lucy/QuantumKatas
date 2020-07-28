@@ -25,7 +25,7 @@ Test('/play', function (t) {
         t.error(err, 'No parse error');
         t.ok(api, 'Valid swagger api');
         /**
-         * summary: Specifies a card to play, indicated by the number index into the list of cards
+         * summary: Specifies a card to reveal and checks for a match to the previous.
          * description: 
          * parameters: card
          * produces: application/json, text/json

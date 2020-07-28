@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "v1",
-        "title": "Memory Game API",
+        "title": "Simple Gates Game API",
         "description": "A simple single-instance representation of memory (Concentration)."
     },
     "schemes": [
@@ -31,9 +31,40 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Card"
+                            "type": "object",
+                            "properties": {
+                                "players": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Player"
+                                    }
+                                },
+                                "deck": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
+                                "cards": {
+                                    "type": "object",
+                                    "properties": {
+                                        "player_id": {
+                                            "type": "string"
+                                        },
+                                        "cards": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/Card"
+                                            }
+                                        }
+                                    }
+                                },
+                                "qubits": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Qubit"
+                                    }
+                                }
                             }
                         }
                     }
@@ -41,13 +72,13 @@
                 "deprecated": false
             }
         },
-        "/guess": {
+        "/play": {
             "put": {
                 "tags": [
                     "Game"
                 ],
                 "summary": "Specifies a card to reveal and checks for a match to the previous.",
-                "operationId": "game_guess",
+                "operationId": "game_play",
                 "produces": [
                     "application/json",
                     "text/json"
@@ -67,7 +98,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/CardGuess"
+                                "$ref": "#/definitions/CardPlay"
                             }
                         }
                     }
@@ -80,7 +111,7 @@
                 "tags": [
                     "Game"
                 ],
-                "summary": "Initializes a new game board of the specified size (# of matches).",
+                "summary": "Initializes a new game board",
                 "operationId": "game_new",
                 "produces": [
                     "application/json",
@@ -88,11 +119,22 @@
                 ],
                 "parameters": [
                     {
-                        "name": "size",
+                        "name": "players",
                         "in": "query",
                         "required": true,
-                        "type": "integer",
-                        "format": "int32"
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/NewPlayer"
+                        }
+                    },
+                    {
+                        "name": "card_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/CardType"
+                        }
                     }
                 ],
                 "responses": {
@@ -108,12 +150,15 @@
         "Card": {
             "type": "object",
             "properties": {
-                "cleared": {
-                    "type": "boolean"
+                "name": {
+                    "type": "string"
                 }
             }
         },
-        "CardGuess": {
+        "CardType": {
+            "type": "string"
+        },
+        "CardPlay": {
             "type": "object",
             "properties": {
                 "id": {
@@ -123,6 +168,39 @@
                 "value": {
                     "format": "int32",
                     "type": "integer"
+                }
+            }
+        },
+        "NewPlayer": {
+            "type": "string"
+        },
+        "Player": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "score": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "cards": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Card"
+                    }
+                }
+            }
+        },
+        "Qubit": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "integer",
+                    "format": "int32"
                 }
             }
         }
