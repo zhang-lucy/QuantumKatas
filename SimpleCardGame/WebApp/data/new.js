@@ -25,9 +25,9 @@
 
 var DEFAULT_PLAYER_SCORE = 0;
 var DEFAULT_CARD_TYPES = ["H", "X", "Y", "Z"]; //TODO: add more
-var DEFAULT_CARD_FREQUENCIES = [5, 5, 5, 5];
+var DEFAULT_CARD_FREQUENCIES = [2,2,2,2];
 var DEFAULT_QUBIT_VALUES = [0, 0, 1, 0];
-var DEFAULT_CARDS_PER_PLAYER = 5;
+var DEFAULT_CARDS_PER_PLAYER = 2;
 
 // Knuth shuffle courtesy of https://www.kirupa.com/html5/shuffling_array_js.htm
 Array.prototype.shuffle = function () {
@@ -65,11 +65,12 @@ function getCards(card_types, card_frequencies) {
 }
 
 function getQubits(qubit_values) {
-  var qubits = [];
-  qubit_values.forEach(qubit => {
-    qubits.push({ "value": qubit });
-  });
-  return qubits;
+  var output = []
+  var i;
+  for (i = 0; i < qubit_values.length-1; i+=2) {
+    output.push({"value1": qubit_values[i], "value2": qubit_values[i+1]})
+  }
+  return output;
 }
 
 /**
@@ -116,7 +117,7 @@ module.exports = {
           var player_card = cards.pop();
           player_cards.push(player_card);
         }
-        players.push({ "name": name, "score": DEFAULT_PLAYER_SCORE, "id": count, "cards": player_cards });
+        players.push({ "name": name, "score": DEFAULT_PLAYER_SCORE, "id": count.toString(), "cards": player_cards });
         count++;
       });
 
@@ -124,7 +125,9 @@ module.exports = {
       var board = {
         "players": players,
         "deck": cards,
-        "qubits": getQubits(DEFAULT_QUBIT_VALUES)
+        "qubits": getQubits(DEFAULT_QUBIT_VALUES),
+        "played_cards": [],
+        "game_over": false
       }
 
       // For sample purposes only; use cloud storage

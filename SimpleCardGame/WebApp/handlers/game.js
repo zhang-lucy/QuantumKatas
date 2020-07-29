@@ -40,8 +40,9 @@ module.exports = {
         // If there's a game in progress, retrieve its current state
         if (global.board){
             status = 200;
+            res.status(status);
             var provider = dataProvider['get']['200'];
-            var board = provider(req, res, function (err, data) {
+            var board = provider(req, res, function (err) {
                 if (err) {
                     next(err);
                     return;
@@ -52,7 +53,7 @@ module.exports = {
         else { // No game in progress: set bad request error
             status = 400;
             message = "Please start a new game (POST '/new?players={list of players}')."
+            res.status(status).send(message);
         }
-        res.status(status).send(message);
     }
 };

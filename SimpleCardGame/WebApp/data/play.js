@@ -22,41 +22,64 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 'use strict';
-// var Mockgen = require('./mockgen.js');
-var card1 = null;
+
+function updateQubit(qubit, card) {
+    // TODO
+    // qubit: {"value1": "integer", "value2": "integer"}
+    // card: {"name": "string"}
+    return qubit;
+}
+
 /**
- * Operations on /guess
+ * Operations on /play
  */
 module.exports = {
     /**
-     * summary: Reveals the specified card and checks for match to the previous.
-     * description: Each guess consists of 2 specified cards.
-     * parameters: card
+     * summary: Plays the specified card from the indicated player's hand.
+     * description: Each play consists of 1 card and 1 player.
+     * parameters: card, player_id
      * produces: application/json, text/json
      * responses: 200
-     * operationId: game_guess
+     * operationId: game_play
      */
     put: {
         200: function (req, res, callback) {
-             // Obtain the card values
-             var response = {};
-             var card = req.query.card;
+            // Obtain the card values
+            var response = {};
 
-             response.id = card;
-             response.value = global.board[card].value;
+            var player_id = req.query.player_id;
+            var card_index = req.query.card_index;
+            var qubit_index = req.query.qubit_index;
 
-             // If 1st card has been specified, check if this 2nd card matches
-             if (card1 !== null){
-                if (global.board[card1].value === global.board[card].value){
-                    global.board[card1].cleared =
-                    global.board[card].cleared = "true";
-                }
-                card1 = null;
-             } else { // This is the 1st card of the guess
-                 card1 = card;
-             }
+            // get current player's cards
+            var player_cards = global.board.players.filter(p=>p.id==player_id)[0].cards;
+            var qubits = global.board.qubits;
 
-             return Array(response);
+            // store played card, removing from player's hand
+            var played_card = player_cards.pop(card_index);
+            played_card.player_id = player_id;
+            global.board.played_cards.push(played_card);
+
+            // deal another card from the deck
+            var new_card = global.board.deck.pop();
+            player_cards.push(new_card);
+
+            // update corresponding players cards
+            global.board.players = global.board.players.map(p => {
+                if (p.id == player_id) {
+                    p.cards = player_cards;
+                } 
+                return p;
+            });
+
+            // update qubit
+            var newQubit = updateQubit(qubits[qubit_index], player_cards[card_index])
+            global.board.qubits[qubit_index] = newQubit;
+
+            response.player_id = player_id;
+            response.qubits = global.board.qubits;
+
+            return response;
         }
     }
 };

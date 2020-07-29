@@ -3,7 +3,7 @@
     "info": {
         "version": "v1",
         "title": "Simple Gates Game API",
-        "description": "A simple single-instance representation of memory (Concentration)."
+        "description": "A simple representation of Simple Gates Game."
     },
     "schemes": [
         "http",
@@ -40,6 +40,12 @@
                                     }
                                 },
                                 "deck": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
+                                "played_cards": {
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/definitions/Card"
@@ -83,17 +89,44 @@
                     "application/json",
                     "text/json"
                 ],
+
                 "parameters": [
                     {
-                        "name": "card",
+                        "name": "player_id",
                         "in": "query",
                         "required": true,
-                        "format": "int32"
+                        "type": "string"
+                    },
+                    {
+                        "name": "card_index",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "qubit_index",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "player_id": {
+                                    "type": "string"
+                                },
+                                "qubits": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Qubit"
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "deprecated": false
@@ -126,7 +159,7 @@
                         "required": false,
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/CardType"
+                            "type": "string"
                         }
                     }
                 ],
@@ -145,11 +178,27 @@
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "player_id": {
+                    "type": "string"
                 }
             }
         },
         "CardType": {
             "type": "string"
+        },
+        "CardPlay": {
+            "type": "object",
+            "properties": {
+                "card_index": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "qubit_index": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
         },
         "NewPlayer": {
             "type": "string"
@@ -178,7 +227,11 @@
         "Qubit": {
             "type": "object",
             "properties": {
-                "value": {
+                "value1": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "value2": {
                     "type": "integer",
                     "format": "int32"
                 }

@@ -24,7 +24,7 @@
 'use strict';
 var dataProvider = require('../data/play.js');
 /**
- * Operations on /guess
+ * Operations on /play
  */
 module.exports = {
     /**
@@ -33,31 +33,41 @@ module.exports = {
      * produces: application/json, text/json
      * responses: 200, 400
      */
-    put: function game_guess(req, res, next) {
+    put: function game_play(req, res, next) {
         var status, message;
-        var validGuess = true;
+        var validplay = true;
         var board = global.board;
-        var guess = req.query.card;
+        var player_id = req.query.player_id;
+        var card_index = req.query.card_index;
+        var qubit_index = req.query.qubit_index;
+        var player_cards = board.players.filter(p => p.id == player_id)[0].cards;
 
         // Ensure there's a game running
-        if (!board){
-            validGuess = false;
-            message = "Please start a new game (POST '/new?players={list of players}')."
+        if (!board) {
+            validplay = false;
+            message = "Please start a new game (POST '/new?players={list of players}').";
+        }
+        // Ensure player exists 
+        else if (!board.players.map(p => p.id).includes(player_id)) {
+            validplay = false;
+            message = board.players.map(p => p.id).toString() + "Invalid player ID.";
+        }
+        // // Ensure cards aren't out of range
+        else if (card_index < 0 || card_index >= player_cards.length) {
+                validplay = false;
+                message = "Not a valid index. Please specify card ids within the range of 0 to " +
+                    String(player_cards.length - 1) + ".";
         } 
-        // Ensure card isn't out of range
-        else if ((guess < 0)||(guess > board.length)){
-            validGuess = false;
-            message = "Please specify card ids within the range of 0 to " +
-                String(board.length-1) + ".";
+        // Ensure qubit specified isn't out of range
+        else if (qubit_index < 0 || qubit_index >= global.board.qubits.length) {
+            validplay = false;
+            message = "Not a valid index. Please specify qubit ids within the range of 0 to " +
+                String(global.board.qubits.length - 1) + ".";
         }
-        // Check that card hasn't been cleared
-        else if ("true" == board[guess].cleared) {
-            validGuess = false;
-            message = "Please specify a card which hasn't been cleared."
-        }
-        
-        // This is a valid guess: reveal the card
-        if (validGuess){
+
+
+        // This is a valid play: reveal the card
+        if (validplay) {
             status = 200;
             var provider = dataProvider['put']['200'];
             var card = provider(req, res, function (err, data) {
@@ -67,7 +77,7 @@ module.exports = {
                 }
             });
             res.json(card);
-        } else {    // This is not a valid guess: set bad request error
+        } else {    // This is not a valid play: set bad request error
             status = 400;
         }
 

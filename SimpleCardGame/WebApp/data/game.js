@@ -22,7 +22,7 @@
 //  THE SOFTWARE.
 //  ---------------------------------------------------------------------------------
 'use strict';
-// var Mockgen = require('./mockgen.js');
+
 /**
  * Operations on /game
  */
@@ -41,19 +41,16 @@ module.exports = {
      */
     get: {
         200: function (req, res, callback) {
-            // Only reveal cleared card values
-            // var currentBoardState = [];
             var board = global.board;
+            var currentBoardState = {};
 
-            // for (var i=0; i < board.length; i++){
-            //     var card = {};
-            //     card.cleared = board[i].cleared;
-            //     if ("true" == card.cleared) {  // To debug the board, comment this line
-            //         card.value = board[i].value;
-            //     }                              // And this line
-            //     currentBoardState.push(card);
-            // }
-            return board;
+            currentBoardState.players = board.players;
+            currentBoardState.cards = board.cards;
+            currentBoardState.qubits = board.qubits;
+            currentBoardState.played_cards = board.played_cards;
+            currentBoardState.deck = board.deck; // TODO: Remove this line when debugging finished. Also update schema to remove this.
+
+            return currentBoardState;
         }
     }
 };
