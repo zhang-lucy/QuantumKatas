@@ -68,7 +68,7 @@ function drawGameBoard(board) {
 
     // add first player
     output += "<div class=\"playerLabel\">" + board.players[0].name + "</div>";
-    
+
     // add first player's cards;
     let glyph = "glyphicon glyphicon-cloud";
     let css = "rows1";

@@ -106,7 +106,7 @@
                         "type": "string"
                     },
                     {
-                        "name": "card_index",
+                        "name": "card_id",
                         "in": "query",
                         "required": true,
                         "type": "string"
@@ -185,6 +185,9 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "player_id": {
