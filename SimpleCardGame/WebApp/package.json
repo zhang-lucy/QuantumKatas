@@ -2,13 +2,13 @@
     "name": "webapp",
     "description": "",
     "version": "1.0.0",
-    "author": "1 <1>",
+    "author": "Lucy Zhang <zhanglucyy@yahoo.com>",
     "contributors": [],
     "repository": {
         "type": "git",
-        "url": "git://github.com/1/webapp.git"
+        "url": "git://github.com/zhang-lucy/webapp.git"
     },
-    "bugs": "http://github.com/1/webapp/issues",
+    "bugs": "http://github.com/zhang-lucy/webapp/issues",
     "publishConfig": {
         "registry": "https://registry.npmjs.org"
     },

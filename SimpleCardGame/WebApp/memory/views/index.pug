@@ -1,5 +1,12 @@
 extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+block content  
+    div
+        form(method="GET")
+        textarea()
+        br
+        textarea() 
+        br
+        button(onclick="newGame()" type="button")
+          | Start    
+        #game-board
+            script restoreGame();

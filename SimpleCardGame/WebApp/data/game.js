@@ -49,7 +49,9 @@ module.exports = {
             currentBoardState.qubits = board.qubits;
             currentBoardState.played_cards = board.played_cards;
             currentBoardState.deck = board.deck; // TODO: Remove this line when debugging finished. Also update schema to remove this.
-
+            currentBoardState.player_turn = board.player_turn;
+            currentBoardState.selected_cards = board.selected_cards;
+            
             return currentBoardState;
         }
     }

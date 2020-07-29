@@ -45,6 +45,21 @@
                                         "$ref": "#/definitions/Card"
                                     }
                                 },
+                                "player_turn": {
+                                    "type": "string"
+                                },
+                                "selected_cards": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
+                                "played_cards": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
                                 "cards": {
                                     "type": "object",
                                     "properties": {
@@ -170,6 +185,9 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "player_id": {
                     "type": "string"
                 }
             }

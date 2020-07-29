@@ -45,6 +45,15 @@
                                         "$ref": "#/definitions/Card"
                                     }
                                 },
+                                "player_turn": {
+                                    "type": "string"
+                                },
+                                "selected_cards": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Card"
+                                    }
+                                },
                                 "played_cards": {
                                     "type": "array",
                                     "items": {
@@ -89,7 +98,6 @@
                     "application/json",
                     "text/json"
                 ],
-
                 "parameters": [
                     {
                         "name": "player_id",
@@ -177,6 +185,9 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "player_id": {

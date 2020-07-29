@@ -41,6 +41,8 @@ module.exports = {
         var card_index = req.query.card_index;
         var qubit_index = req.query.qubit_index;
         var player_cards = board.players.filter(p => p.id == player_id)[0].cards;
+        var player_turn = board.player_turn;
+        var selected_cards = board.selected_cards;
 
         // Ensure there's a game running
         if (!board) {
@@ -63,6 +65,20 @@ module.exports = {
             validplay = false;
             message = "Not a valid index. Please specify qubit ids within the range of 0 to " +
                 String(global.board.qubits.length - 1) + ".";
+        } 
+        // Ensure the correct player's turn
+        else if (player_turn != player_id) {
+            validplay = false;
+            message = "It is not " + String(player_id) + "'s turn."
+        }
+        // Players can only play to the cards the haven't played to yet
+        else {
+            selected_cards.forEach(card => {
+                if (card.qubit_index == qubit_index) {
+                    validplay = false;
+                    message = "You have already played a card to Qubit " + qubit_index + ". Please specify a qubit that has not been played to yet."
+                }
+            })
         }
 
 

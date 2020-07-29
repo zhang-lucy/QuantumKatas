@@ -50,11 +50,15 @@ module.exports = {
                 return;
             }
         });
+
+        
         message = "Ready to play! Players: " +
                     req.query.players[0] + 
                     " and " + 
                     req.query.players[1]; 
 
         res.status(status).send(message);
+
+
     }
 };
