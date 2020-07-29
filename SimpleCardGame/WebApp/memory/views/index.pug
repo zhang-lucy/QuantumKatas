@@ -2,9 +2,9 @@ extends layout
 block content  
     div
         form(method="GET")
-        textarea()
+        textarea(placeholder="Name of Player 1" id="player1name")
         br
-        textarea() 
+        textarea(placeholder="Name of Player 2" id="player2name") 
         br
         button(onclick="newGame()" type="button")
           | Start    

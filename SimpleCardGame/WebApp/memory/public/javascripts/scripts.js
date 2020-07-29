@@ -33,7 +33,9 @@ function newGame() {
     // cardsFlipped = 0;
 
     // extract game size selection from user
-    var players = ["jj","bb"]; // TODO
+    var player1name = $("#player1name").val();
+    var player2name = $("#player2name").val();
+    var players = [player1name,player2name]; // TODO
     // var players = $("#newGamePlayers").val(); 
 
     // fetch the game board array from the server
@@ -63,42 +65,45 @@ function restoreGame() {
 function drawGameBoard(board) {
     // create output
     var output = "";
-    // detect board size CSS class
-    var css = "";
-    switch (board.length / 4) {
-        case 1:
-            css = "rows1";
-            break;
-        case 2:
-            css = "rows2";
-            break;
-        case 3:
-            css = "rows3";
-            break;
-        case 4:
-            css = "rows4";
-            break;   
+
+    // add first player
+    output += "<div class=\"playerLabel\">" + board.players[0].name + "</div>";
+    
+    // add first player's cards;
+    let glyph = "glyphicon glyphicon-cloud";
+    let css = "rows1";
+
+    // generate HTML for each card and append to the output
+    for (var i = 0; i < board.players[0].cards.length; i++) {
+        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
+            <div class=\"front\">" + board.players[0].cards[i].name + "</div>\
+            <div class=\"back\">" + glyph + "</div>\
+            </div></div>";
     }
-    // board.players;
-    board.players.forEach(p => {
-        let glyph = "glyphicon glyphicon-cloud";
-        // generate HTML for each card and append to the output
-        for (var i = 0; i < p.cards.length; i++) {
-            output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
-                <div class=\"front\">" + p.cards[i].name + "</div>\
-                <div class=\"back\">" + glyph + "</div>\
-                </div></div>";
-        }
-    });
-    // // generate HTML for each card and append to the output
-    // for (var i = 0; i < board.length; i++) {
 
-    //     output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
-    //         <div class=\"front\"><span class=\"glyphicon glyphicon-question-sign\"></span></div>\
-    //         <div class=\"back\">" + lookUpGlyphicon(board[i].value) + "</div>\
-    //         </div></div>";
+    output += "<br><br>"
 
-    // }
+    // add qubits
+    // output += "<div class=\"qubitContainer\">" + board.qubits.toString + "</div";
+    output += "<div class=\"flipContainer col-xs-3 \"><div class=\"qubitCards\" id=\"" + i + ">\
+    <div class=\"front\">" + String(board.qubits[1].value1) + "</div>\
+    </div></div>";
+
+
+    output += "<br><br>";
+
+    // add second player
+    output += "<div class=\"playerLabel\">" + board.players[1].name + "</div>";
+
+    // add second player's cards;
+    // generate HTML for each card and append to the output
+    for (var i = 0; i < board.players[1].cards.length; i++) {
+        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
+            <div class=\"front\">" + board.players[1].cards[i].name + "</div>\
+            <div class=\"back\">" + glyph + "</div>\
+            </div></div>";
+    }
+
     // place the output on the page
     $("#game-board").html(output);
 }

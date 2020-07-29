@@ -25,7 +25,7 @@
 
 var DEFAULT_PLAYER_SCORE = 0;
 var DEFAULT_CARD_TYPES = ["H", "X", "Y", "Z"]; //TODO: add more
-var DEFAULT_CARD_FREQUENCIES = [2,2,2,2];
+var DEFAULT_CARD_FREQUENCIES = [2, 2, 2, 2];
 var DEFAULT_QUBIT_VALUES = [0, 0, 1, 0];
 var DEFAULT_CARDS_PER_PLAYER = 2;
 
@@ -41,23 +41,13 @@ Array.prototype.shuffle = function () {
   return input;
 };
 
-// function getPlayers(player_names, cards) {
-//   var players = [];
-//   let count = 0;
-//   player_names.forEach(name => {
-//     players.push({"name": name, "score": DEFAULT_PLAYER_SCORE, "id": count});
-//     count++;
-//   });
-//   return players;
-// }
-
 function getCards(card_types, card_frequencies) {
   var cards = [];
   let index = 0;
   card_types.forEach(card => {
     var i;
     for (i = 0; i < card_frequencies[index]; i++) {
-      cards.push({ "name": card });
+      cards.push({ "name": card, "id": index.toString });
     }
     index++;
   });
@@ -78,32 +68,28 @@ function getQubits(qubit_values) {
  */
 module.exports = {
   /**
-   * TODO: Re-write
-   * summary: Sets up a new game board with specified # of matches
-   * description: The game board is a global array of "card" objects, where
-   *  their position in the array indicates their ID, and their "value" and
-   *  "cleared" properties represent their value and game status. For example,
-   * a new board of size=1 (1 matches) would be generated as:
-   *  [ 
-   *      { "cleared":"false", 
-   *        "value":"0", 
-   *      }, 
-   *      { "cleared":"false", 
-   *        "value":"0", 
-   *      }
-   *  ]
-   * parameters: size
+   * summary: Sets up a new game board with the specified players. Generates
+   * a deck of cards, shuffled. Deals each player the indicated number of cards.
+   * Example:
+   *  {
+   *      "players": [{"name": "JJ", "score": 0, "id": "0", 
+   *                            "cards": [{"name": "Z", "id": "2"}]},
+   *                  {"name": "BB", "score": 0, "id": "1", 
+   *                            "cards": ["name": "Y", "id": "0"]}],
+   *      "deck": [{"name": "H", "id": "1"}],
+   *      "qubits": [{"value1": 0, "value2": 0}, {"value1": 1, "value2": 0}],
+   *      "played_cards": [],
+   *      ""player_turn": "0",
+   *      "selected_cards": [],
+   *      "game_over": false
+   *  }
+   * parameters: players
    * produces: application/json, text/json
    * responses: 200
    * operationId: game_new
    */
   post: {
     200: function (req, res, callback) {
-      // Generate random [0...size] value pairs and shuffle them
-      //  var values = Array.from(Array(req.query.size).keys());
-      //  var deck = values.concat(values.slice());
-      //  deck.shuffle();
-
       var cards = getCards(DEFAULT_CARD_TYPES, DEFAULT_CARD_FREQUENCIES);
       cards.shuffle();
 
@@ -132,7 +118,7 @@ module.exports = {
         "game_over": false
       }
 
-      // For sample purposes only; use cloud storage
+      // For sample purposes only; use cloud storage for scaling up
       global.board = board;
     }
   }

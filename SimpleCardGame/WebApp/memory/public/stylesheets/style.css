@@ -66,21 +66,73 @@ html, body, .container-fluid, .row-fluid {
   font-size: 2em;
 }
 
+/* player */
+.playerLabel {
+  position: relative;
+  border: 1vh solid transparent;
+  min-height: 50px;
+  min-width: 50px;
+  color: #5fe883;
+  font-size: 2em;
+  text-align: left;
+}
+
 /* cards */
 
 .flipContainer { 
   position: relative;
   border: 1vh solid transparent;
-  min-height: 50px;
+  min-height: 100px;
   min-width: 50px;
   /* add code from Part 5.1 here */
+}
+
+.qubitCards {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: solid 3px #111111;
+  /* add code from Part 5.2 here */
+}
+
+.qubitCards div {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.qubitCards .back {
+  transform: rotateY(180deg);
+  background-color: #D3D3D3;
+  text-align: center;
+  display: table;
+  color: #00ff00;
+
+}
+
+.qubitCards .front {
+  background-color: #ffffff;
+  text-align: center;
+  display: table;
+  color: #00ff00;
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10%
+
+
 }
 
 .cards {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: solid 3px #000000;
+  border: solid 3px #111111;
   /* add code from Part 5.2 here */
 }
 
@@ -96,7 +148,16 @@ html, body, .container-fluid, .row-fluid {
 .cards .front {
   background-color: #ffffff;
   text-align: center;
-   display: table;
+  display: table;
+  color: #111111;
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10%
+
+
 }
 
 .cards .back {

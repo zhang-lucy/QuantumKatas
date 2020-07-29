@@ -38,7 +38,7 @@ module.exports = {
         var validplay = true;
         var board = global.board;
         var player_id = req.query.player_id;
-        var card_index = req.query.card_index;
+        var card_id = req.query.card_id;
         var qubit_index = req.query.qubit_index;
         var player_cards = board.players.filter(p => p.id == player_id)[0].cards;
         var player_turn = board.player_turn;
@@ -54,11 +54,10 @@ module.exports = {
             validplay = false;
             message = board.players.map(p => p.id).toString() + "Invalid player ID.";
         }
-        // // Ensure cards aren't out of range
-        else if (card_index < 0 || card_index >= player_cards.length) {
+        // // Ensure player has card
+        else if (player_cards.filter(c=>c.id == card_id).length != 1) {
                 validplay = false;
-                message = "Not a valid index. Please specify card ids within the range of 0 to " +
-                    String(player_cards.length - 1) + ".";
+                message = "Not a valid card id. Please indicate a card in the player's hand";
         } 
         // Ensure qubit specified isn't out of range
         else if (qubit_index < 0 || qubit_index >= global.board.qubits.length) {

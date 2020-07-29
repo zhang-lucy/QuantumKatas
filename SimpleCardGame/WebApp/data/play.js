@@ -36,8 +36,8 @@ function updateQubit(qubit, card) {
 module.exports = {
     /**
      * summary: Plays the specified card from the indicated player's hand.
-     * description: Each play consists of 1 card and 1 player.
-     * parameters: card, player_id
+     * description: Each play consists of a card, player, and qubit.
+     * parameters: card_id, player_id, qubit_index
      * produces: application/json, text/json
      * responses: 200
      * operationId: game_play
@@ -48,12 +48,21 @@ module.exports = {
             var response = {};
 
             var player_id = req.query.player_id;
-            var card_index = req.query.card_index;
+            var card_id = req.query.card_id;
             var qubit_index = req.query.qubit_index;
 
             // get current player's cards
             var player_cards = global.board.players.filter(p=>p.id==player_id)[0].cards;
             var qubits = global.board.qubits;
+
+            // find the indicated card
+            var card_index = -1;
+            for (var i = 0; i < player_cards.length; i++) {
+                if (player_cards[i].id == card_id) {
+                    card_index = i;
+                }
+            }
+            // TODO: assert that card_index is not -1
 
             // store played card, removing from player's hand
             var played_card = player_cards.pop(card_index);
