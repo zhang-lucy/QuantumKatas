@@ -23,7 +23,7 @@
 //  ---------------------------------------------------------------------------------
 'use strict';
 
-function updateQubit(cards, q1_hist, q2_hist) {
+function updateQubits(cards, q1_hist, q2_hist) {
     var body = {
         "cards": cards,
         "q1_hist": q1_hist,
@@ -76,6 +76,11 @@ module.exports = {
             // store played cards, removing from player's hand
             var played_card_1 = player_cards.pop(card_indices[0]);
             var played_card_2 = player_cards.pop(card_indices[1]);
+
+            // update qubits
+            var newQubits = updateQubits([played_card_1.name, played_card_2.name], global.board.played_cards["0"].map(c => c.name), global.board.played_cards["1"].map(c => c.name))
+            global.board.qubits = newQubits;
+
             global.board.played_cards["0"].push(played_card_1);
             global.board.played_cards["1"].push(played_card_2);
 
@@ -92,10 +97,6 @@ module.exports = {
                 } 
                 return p;
             });
-
-            // update qubit
-            var newQubit = updateQubit(player_cards.map(c => c.name), global.board.played_cards["0"].map(c => c.name), global.board.played_cards["1"].map(c => c.name))
-            global.board.qubits[qubit_index] = newQubit;
 
             response.player_id = player_id;
             response.qubits = global.board.qubits;
