@@ -66,7 +66,6 @@ module.exports = {
 
             // store played card, removing from player's hand
             var played_card = player_cards.pop(card_index);
-            played_card.player_id = player_id;
             global.board.played_cards.push(played_card);
 
             // deal another card from the deck

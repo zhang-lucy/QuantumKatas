@@ -145,6 +145,10 @@ html, body, .container-fluid, .row-fluid {
   backface-visibility: hidden;
 }
 
+.cards:hover {
+  border: solid 4px #00ff00;
+}
+
 .cards .front {
   background-color: #ffffff;
   text-align: center;

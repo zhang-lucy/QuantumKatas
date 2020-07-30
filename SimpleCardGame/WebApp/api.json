@@ -189,9 +189,6 @@
                 },
                 "id": {
                     "type": "string"
-                },
-                "player_id": {
-                    "type": "string"
                 }
             }
         },

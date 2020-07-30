@@ -27,6 +27,8 @@ var cardsFlipped = 0;
 var selectedCards = [];
 var selectedCardsValues = [];
 
+var playerTurn = 0;
+
 function newGame() {
     // reset the game
     // gameBoardSize = 0;
@@ -75,7 +77,7 @@ function drawGameBoard(board) {
 
     // generate HTML for each card and append to the output
     for (var i = 0; i < board.players[0].cards.length; i++) {
-        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
+        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + board.players[0].cards[i].id + "\" onClick=\"playCard(this)\">\
             <div class=\"front\">" + board.players[0].cards[i].name + "</div>\
             <div class=\"back\">" + glyph + "</div>\
             </div></div>";
@@ -84,11 +86,9 @@ function drawGameBoard(board) {
     output += "<br><br>"
 
     // add qubits
-    // output += "<div class=\"qubitContainer\">" + board.qubits.toString + "</div";
     output += "<div class=\"flipContainer col-xs-3 \"><div class=\"qubitCards\" id=\"" + i + ">\
-    <div class=\"front\">" + String(board.qubits[1].value1) + "</div>\
+    <div class=\"front\">" + (board.qubits[1].value1) + "</div>\
     </div></div>";
-
 
     output += "<br><br>";
 
@@ -98,7 +98,7 @@ function drawGameBoard(board) {
     // add second player's cards;
     // generate HTML for each card and append to the output
     for (var i = 0; i < board.players[1].cards.length; i++) {
-        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + i + "\" onClick=\"playCard(this)\">\
+        output += "<div class=\"flipContainer col-xs-3 " + css + "\"><div class=\"cards flip matched\" id=\"" + board.players[1].cards[i].id + "\" onClick=\"playCard(this)\">\
             <div class=\"front\">" + board.players[1].cards[i].name + "</div>\
             <div class=\"back\">" + glyph + "</div>\
             </div></div>";
@@ -110,79 +110,25 @@ function drawGameBoard(board) {
 
 function playCard(card) {
 
-
     // only allow the user to select two cards at a time
     if (selectedCards.length < 2) {
 
-        $(card).toggleClass("flip");
-
         // check if this is the first card selection or the second
-        if (selectedCards.length == 0) {
+        if (true) { // TODO change this selectedCards.length == 0
             // store the first card selection
             selectedCards.push(card);
 
-            // post this guess to the server and get this card's value
+            // post this play to the server and get the qubit's resulting value
             $.ajax({
-                url: "http://localhost:8000/play?card_index=0"//TODO: FIX // + selectedCards[0] 
-                    + "qubit_index=" + "0"
-                    + "player_id" + board.player_turn, // TODO: FIX
+                url: "http://localhost:8000/play?card_id=" + card.id//TODO: FIX // + selectedCards[0] 
+                    + "&qubit_index=" + "0"
+                    + "&player_id=" + playerTurn, // TODO: FIX
                 type: 'PUT',
                 success: function (response) {
-                    // display first card value
-                    // TODO: CHANGE
-                    $("#" + selectedCards[0] + " .back").html(lookUpGlyphicon(response[0].value));
 
-                    // store the first card value
-                    selectedCardsValues.push(response[0].value);
                 }
             });
-        }
-        else if (selectedCards.length == 1) {
-            // store the second card selection
-            selectedCards.push(card.id);
-
-            // post this guess to the server and get this card's value
-            $.ajax({
-                url: "http://localhost:8000/guess?card=" + selectedCards[1],
-                type: 'PUT',
-                success: function (response) {
-                    // display first card value
-                    $("#" + selectedCards[1] + " .back").html(lookUpGlyphicon(response[0].value));
-
-                    // store the first card value
-                    selectedCardsValues.push(response[0].value);
-
-                    // check if this was a match
-                    if (selectedCardsValues[0] == selectedCardsValues[1]) {
-                        // increment our flipped cards counter
-                        cardsFlipped += 2;
-
-                        // assign the matched class
-                        $("#" + selectedCards[0]).addClass("matched");
-                        $("#" + selectedCards[1]).addClass("matched");
-
-                        // reset our selection arrays
-                        selectedCards = [];
-                        selectedCardsValues = [];
-
-                        // check if the user won the game
-                        // Add code from Part 2.6 here
-
-                    }
-                    else {
-                        // wait three seconds, then flip the cards back
-                        setTimeout(function () {
-                            // reset the background color
-                            $("#" + selectedCards[0]).toggleClass("flip");
-                            $("#" + selectedCards[1]).toggleClass("flip");
-
-                            // reset our selection arrays
-                            selectedCards = [];
-                            selectedCardsValues = [];
-                        }, 1000);
-                    }
-                }
-            });
+            restoreGame();
         }
     }
 }

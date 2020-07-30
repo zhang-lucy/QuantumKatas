@@ -27,7 +27,7 @@ var DEFAULT_PLAYER_SCORE = 0;
 var DEFAULT_CARD_TYPES = ["H", "X", "Y", "Z"]; //TODO: add more
 var DEFAULT_CARD_FREQUENCIES = [2, 2, 2, 2];
 var DEFAULT_QUBIT_VALUES = [0, 0, 1, 0];
-var DEFAULT_CARDS_PER_PLAYER = 2;
+var DEFAULT_CARDS_PER_PLAYER = 1;
 
 // Knuth shuffle courtesy of https://www.kirupa.com/html5/shuffling_array_js.htm
 Array.prototype.shuffle = function () {
@@ -47,9 +47,9 @@ function getCards(card_types, card_frequencies) {
   card_types.forEach(card => {
     var i;
     for (i = 0; i < card_frequencies[index]; i++) {
-      cards.push({ "name": card, "id": index.toString });
+      cards.push({ "name": card, "id": index.toString() });
+      index++;
     }
-    index++;
   });
   return cards;
 }
