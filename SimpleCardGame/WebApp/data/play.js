@@ -30,7 +30,7 @@ function updateQubit(cards, q1_hist, q2_hist) {
         "q2_hist": q2_hist,
     }
     $.toJSON(body);
-    $.post("http://localhost:5000/simulate", function (response) {
+    $.post("http://localhost:5000/simulate", body, function (response) {
         if(response.status == 200) {
             return {"logs": response.logs, "states": response.states, "measurements": response.measurements};
         }
