@@ -112,7 +112,7 @@ module.exports = {
         "players": players,
         "deck": cards,
         "qubits": getQubits(DEFAULT_QUBIT_VALUES),
-        "played_cards": [],
+        "played_cards": {},
         "player_turn": players[0].id,
         "selected_cards": [],
         "game_over": false

@@ -23,11 +23,18 @@
 //  ---------------------------------------------------------------------------------
 'use strict';
 
-function updateQubit(qubit, card) {
-    // TODO
-    // qubit: {"value1": "integer", "value2": "integer"}
-    // card: {"name": "string"}
-    return qubit;
+function updateQubit(cards, q1_hist, q2_hist) {
+    var body = {
+        "cards": cards,
+        "q1_hist": q1_hist,
+        "q2_hist": q2_hist,
+    }
+    $.toJSON(body);
+    $.post("http://localhost:5000/simulate", function (response) {
+        if(response.status == 200) {
+            return {"logs": response.logs, "states": response.states, "measurements": response.measurements};
+        }
+    });
 }
 
 /**
@@ -48,28 +55,34 @@ module.exports = {
             var response = {};
 
             var player_id = req.query.player_id;
-            var card_id = req.query.card_id;
-            var qubit_index = req.query.qubit_index;
-
+            var card_id_1 = req.query.card_id_1;
+            var card_id_2 = req.query.card_id_2;
+            
             // get current player's cards
             var player_cards = global.board.players.filter(p=>p.id==player_id)[0].cards;
-            var qubits = global.board.qubits;
 
-            // find the indicated card
-            var card_index = -1;
+            // find the indicated cards
+            var card_indices = [-1, -1];
             for (var i = 0; i < player_cards.length; i++) {
-                if (player_cards[i].id == card_id) {
-                    card_index = i;
+                if (player_cards[i].id == card_id_1) {
+                    card_indices[0] = i;
+                }
+                else if (player_cards[i].id == card_id_2) {
+                    card_indices[1] = i;
                 }
             }
             // TODO: assert that card_index is not -1
 
-            // store played card, removing from player's hand
-            var played_card = player_cards.pop(card_index);
-            global.board.played_cards.push(played_card);
+            // store played cards, removing from player's hand
+            var played_card_1 = player_cards.pop(card_indices[0]);
+            var played_card_2 = player_cards.pop(card_indices[1]);
+            global.board.played_cards["0"].push(played_card_1);
+            global.board.played_cards["1"].push(played_card_2);
 
-            // deal another card from the deck
+            // deal two cards from the deck
             var new_card = global.board.deck.pop();
+            player_cards.push(new_card);
+            new_card = global.board.deck.pop();
             player_cards.push(new_card);
 
             // update corresponding players cards
@@ -81,7 +94,7 @@ module.exports = {
             });
 
             // update qubit
-            var newQubit = updateQubit(qubits[qubit_index], player_cards[card_index])
+            var newQubit = updateQubit(player_cards.map(c => c.name), global.board.played_cards["0"].map(c => c.name), global.board.played_cards["1"].map(c => c.name))
             global.board.qubits[qubit_index] = newQubit;
 
             response.player_id = player_id;

@@ -55,9 +55,14 @@
                                     }
                                 },
                                 "played_cards": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/Card"
+                                    "type": "object",
+                                    "properties": {
+                                        "qubit_id": {
+                                            "type": "string"
+                                        },
+                                        "items": {
+                                            "$ref": "#/definitions/Card"
+                                        }
                                     }
                                 },
                                 "cards": {
@@ -234,12 +239,21 @@
         },
         "Qubit": {
             "type": "object",
-            "properties": {
-                "value1": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "value2": {
+            "logs": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "states": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "measurements": {
+                "type": "array",
+                "items": {
                     "type": "integer",
                     "format": "int32"
                 }
