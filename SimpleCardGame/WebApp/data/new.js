@@ -25,9 +25,9 @@
 
 var DEFAULT_PLAYER_SCORE = 0;
 var DEFAULT_CARD_TYPES = ["H", "X", "Y", "Z"]; //TODO: add more
-var DEFAULT_CARD_FREQUENCIES = [2, 2, 2, 2];
+var DEFAULT_CARD_FREQUENCIES = [4, 4, 4, 4];
 var DEFAULT_QUBIT_VALUES = [0, 0, 1, 0];
-var DEFAULT_CARDS_PER_PLAYER = 1;
+var DEFAULT_CARDS_PER_PLAYER = 3;
 
 // Knuth shuffle courtesy of https://www.kirupa.com/html5/shuffling_array_js.htm
 Array.prototype.shuffle = function () {
@@ -42,16 +42,17 @@ Array.prototype.shuffle = function () {
 };
 
 function getCards(card_types, card_frequencies) {
-  var cards = [];
-  let index = 0;
-  card_types.forEach(card => {
-    var i;
-    for (i = 0; i < card_frequencies[index]; i++) {
-      cards.push({ "name": card, "id": index.toString() });
-      index++;
-    }
-  });
-  return cards;
+  return [{ "name": "H", "id": "0" }, { "name": "H", "id": "1" }, { "name": "X", "id": "2" }, { "name": "X", "id": "3" }, { "name": "Y", "id": "4" }, { "name": "Y", "id": "5" }, { "name": "Z", "id": "6" }, { "name": "Z", "id": "7" }];
+  // var cards = [];
+  // let index = 0;
+  // card_types.forEach(card => {
+  //   var i;
+  //   for (i = 0; i < card_frequencies[index]; i++) {
+  //     cards.push({ "name": card, "id": index.toString() });
+  //     index++;
+  //   }
+  // });
+  // return cards;
 }
 
 function getQubits(qubit_values) {
@@ -112,7 +113,7 @@ module.exports = {
         "players": players,
         "deck": cards,
         "qubits": getQubits(DEFAULT_QUBIT_VALUES),
-        "played_cards": {},
+        "played_cards": {"0":[],"1":[]},
         "player_turn": players[0].id,
         "selected_cards": [],
         "game_over": false

@@ -93,6 +93,9 @@ html, body, .container-fluid, .row-fluid {
   height: 100%;
   border: solid 3px #7433dd;
   color: #7433dd;
+  text-align: center;
+  padding: 15%;
+  font-size: 1.5em;
 
   /* add code from Part 5.2 here */
 }

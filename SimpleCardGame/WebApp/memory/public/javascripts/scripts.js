@@ -73,7 +73,7 @@ function drawGameBoard(board) {
 
     // add first player's cards;
     let glyph = "glyphicon glyphicon-cloud";
-    let css = "rows1";
+    let css = "";
 
     // generate HTML for each card and append to the output
     for (var i = 0; i < board.players[0].cards.length; i++) {
@@ -83,7 +83,7 @@ function drawGameBoard(board) {
             </div></div>";
     }
 
-    output += "<br><br>"
+    output += "<br><br><br><br><br><br>"
 
     // add qubits
     output += "<div class=\"flipContainer col-xs-3 \"><div class=\"qubitCards\" id=\"" + i + ">\
@@ -95,7 +95,7 @@ function drawGameBoard(board) {
     </div></div>";
 
     
-    output += "<br><br>";
+    output += "<br><br><br><br><br><br>"
 
     // add second player
     output += "<div class=\"playerLabel\">" + board.players[1].name + "</div>";

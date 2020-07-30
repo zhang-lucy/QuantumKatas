@@ -55,13 +55,19 @@
                                     }
                                 },
                                 "played_cards": {
-                                    "type": "object",
-                                    "properties": {
-                                        "qubit_id": {
-                                            "type": "string"
-                                        },
-                                        "items": {
-                                            "$ref": "#/definitions/Card"
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "qubit_id": {
+                                                "type": "string"
+                                            },
+                                            "cards": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/definitions/Card"
+                                                }
+                                            }
                                         }
                                     }
                                 },
@@ -239,23 +245,25 @@
         },
         "Qubit": {
             "type": "object",
-            "logs": {
-                "type": "array",
-                "items": {
-                    "type": "string"
-                }
-            },
-            "states": {
-                "type": "array",
-                "items": {
-                    "type": "string"
-                }
-            },
-            "measurements": {
-                "type": "array",
-                "items": {
-                    "type": "integer",
-                    "format": "int32"
+            "properties": {
+                "logs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "states": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
                 }
             }
         }
