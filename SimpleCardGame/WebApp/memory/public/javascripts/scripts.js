@@ -87,9 +87,14 @@ function drawGameBoard(board) {
 
     // add qubits
     output += "<div class=\"flipContainer col-xs-3 \"><div class=\"qubitCards\" id=\"" + i + ">\
-    <div class=\"front\">" + (board.qubits[1].value1) + "</div>\
+    <div class=\"front\">" + board.qubits[0].value1 + " + " + board.qubits[0].value2 + "i" + "</div>\
     </div></div>";
 
+    output += "<div class=\"flipContainer col-xs-3 \"><div class=\"qubitCards\" id=\"" + i + ">\
+    <div class=\"front\">" + board.qubits[1].value1 + " + " + board.qubits[1].value2 + "i" + "</div>\
+    </div></div>";
+
+    
     output += "<br><br>";
 
     // add second player

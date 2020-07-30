@@ -91,7 +91,9 @@ html, body, .container-fluid, .row-fluid {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: solid 3px #111111;
+  border: solid 3px #7433dd;
+  color: #7433dd;
+
   /* add code from Part 5.2 here */
 }
 
@@ -102,30 +104,19 @@ html, body, .container-fluid, .row-fluid {
   display: block;
   position: absolute;
   backface-visibility: hidden;
-}
-
-.qubitCards .back {
-  transform: rotateY(180deg);
-  background-color: #D3D3D3;
-  text-align: center;
-  display: table;
   color: #00ff00;
-
 }
 
 .qubitCards .front {
-  background-color: #ffffff;
   text-align: center;
   display: table;
-  color: #00ff00;
+  color: #7433dd;
   position: relative;
   float: left;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 10%
-
-
 }
 
 .cards {
