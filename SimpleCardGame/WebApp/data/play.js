@@ -23,22 +23,18 @@
 //  ---------------------------------------------------------------------------------
 'use strict';
 
-// function updateQubit(qubifunction updateQubit(cards, q1_hist, q2_hist) {
-//     var body = {
-//         "cards": cards,
-//         "q1_hist": q1_hist,
-//         "q2_hist": q2_hist,
-//     }
-//     $.toJSON(body);
-//     $.post("http://localhost:5000/simulate", body, function (response) {
-//         if(response.status == 200) {
-//             return {"logs": response.logs, "states": response.states, "measurements": response.measurements};
-//         }
-//     });
-// }
-
-function updateQubit(cards, q1_hist, q2_hist) {
-    return {"logs": ["bobb"], "states": [1,0,0,0], "measurements": [1,1]};
+function updateQubits(cards, q1_hist, q2_hist) {
+    var body = {
+        "cards": cards,
+        "q1_hist": q1_hist,
+        "q2_hist": q2_hist,
+    }
+    $.toJSON(body);
+    $.post("http://localhost:5000/simulate", body, function (response) {
+        if(response.status == 200) {
+            return {"logs": response.logs, "states": response.states, "measurements": response.measurements};
+        }
+    });
 }
 
 
@@ -81,8 +77,13 @@ module.exports = {
             // store played cards, removing from player's hand
             var played_card_1 = player_cards.pop(card_indices[0]);
             var played_card_2 = player_cards.pop(card_indices[1]);
-            global.board.played_cards[0].push(played_card_1);
-            global.board.played_cards[0].push(played_card_2);
+
+            // update qubits
+            var newQubits = updateQubits([played_card_1.name, played_card_2.name], global.board.played_cards["0"].map(c => c.name), global.board.played_cards["1"].map(c => c.name))
+            global.board.qubits = newQubits;
+
+            global.board.played_cards["0"].push(played_card_1);
+            global.board.played_cards["1"].push(played_card_2);
 
             // deal two cards from the deck
             var new_card = global.board.deck.pop();
@@ -98,9 +99,8 @@ module.exports = {
                 return p;
             });
 
-            // update qubit
-            var qubs = updateQubit(player_cards.map(c => c.name), global.board.played_cards["0"].map(c => c.name), global.board.played_cards["1"].map(c => c.name))
-            response.qubits = qubs;//global.board.qubits;
+            response.player_id = player_id;
+            response.qubits = global.board.qubits;
 
             return response;
         }
