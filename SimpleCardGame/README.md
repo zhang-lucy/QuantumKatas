@@ -2,6 +2,10 @@
 
 This is a simple two-player card game that illustrates the functionality of basic single and two-qubit quantum gates. After playing this game, one will have developed a foundation for building quantum circuits and an interest in learning about more complex gates and quantum algorithms.
 
+To play the game, follow the instructions [here](https://docs.microsoft.com/en-us/quantum/quickstarts/install-jupyter) to create and activate a conda environment with the packages required to develop in Q#. 
+
+Then, run all the code cells in `SimpleCardGamePython.ipynb`.
+
 ## Rules:
 
 - Both players begin with 50 points
